@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { MdOutlineNavigateNext } from "react-icons/md";
 
 const Table = () => {
   const [users, setUsers] = useState([]);
@@ -7,12 +8,14 @@ const Table = () => {
   const [lastPage, setLastPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(users, currentPage);
+  const searchTermRef = useRef("");
+  const [perPgae, setPerPgae] = useState(10);
+  const perPageRef = useRef(null);
   const fetchUsers = async (page) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.razzakfashion.com?page=${page}`
+        `https://api.razzakfashion.com?page=${page}&paginate=${perPgae}&search=${searchTerm}`
       );
       const data = await response.json();
       setUsers(data.data);
@@ -28,15 +31,17 @@ const Table = () => {
 
   useEffect(() => {
     fetchUsers(currentPage);
-  }, [currentPage]);
-
-  // Search Functionality
-  useEffect(() => {
-    const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredUsers(filtered);
-  }, [searchTerm, users]);
+  }, [currentPage, searchTerm, perPgae]);
+  // search handler
+  const searchHandleChange = () => {
+    const inputValue = searchTermRef.current.value;
+    setSearchTerm(inputValue);
+  };
+  // selete parpage
+  const perPageUser = () => {
+    const inputValue = perPageRef.current.value;
+    setPerPgae(inputValue);
+  };
 
   const handlePageChange = (page) => {
     if (page > 0 && page <= lastPage) {
@@ -52,15 +57,17 @@ const Table = () => {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search by name"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Search name"
+          ref={searchTermRef}
+          onChange={searchHandleChange}
+          className=" px-2 border border-gray-300 rounded-md w-28 outline-0"
         />
       </div>
 
       {loading ? (
-        <p className="text-center">Loading...</p>
+        <p className="text-center absolute h-screen w-full text-5xl">
+          Loading...
+        </p>
       ) : (
         <>
           <table className="w-full border-collapse border border-gray-300 text-left">
@@ -91,15 +98,31 @@ const Table = () => {
 
           {/* Pagination */}
           <div className="flex items-center justify-end space-x-3 mt-4">
-            <div>
-              <input type="number" className="border-[1px] border-red-700" />
+            <div className="flex items-center gap-2">
+              <p>per page</p>
+              <input
+                type="number"
+                ref={perPageRef}
+                value={perPgae}
+                onChange={perPageUser}
+                className="border-[1px] border-gray-700 text-black w-10 text-center rounded-sm outline-0"
+              />
             </div>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+              className="flex gap-0"
             >
-              Previous
+              <MdOutlineNavigateNext
+                className={`rotate-180 ${
+                  currentPage === 1 ? "opacity-40" : ""
+                }`}
+              ></MdOutlineNavigateNext>
+              <MdOutlineNavigateNext
+                className={`rotate-180 ${
+                  currentPage === 1 ? "opacity-40" : ""
+                }`}
+              ></MdOutlineNavigateNext>
             </button>
             <span className="text-gray-700">
               Page {currentPage} of {lastPage}
@@ -107,9 +130,10 @@ const Table = () => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === lastPage}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+              className="flex gap-0"
             >
-              Next
+              <MdOutlineNavigateNext></MdOutlineNavigateNext>
+              <MdOutlineNavigateNext></MdOutlineNavigateNext>
             </button>
           </div>
         </>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Table from "./component/Table";
+import DragDrop from "./component/DragDrop";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -8,11 +9,10 @@ function App() {
   return (
     <>
       <div>
-        <h1 className="text-7xl">hello word</h1>
-        {/* table */}
-        <div>
+        <div className="m-8">
           <Table></Table>
         </div>
+        <div></div>
       </div>
     </>
   );
