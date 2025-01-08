@@ -50,7 +50,7 @@ const Table = () => {
   };
 
   return (
-    <div className="kzui-table-container p-4 border border-gray-200 rounded-lg shadow-md">
+    <div className=" p-4 border border-gray-200 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">User List</h1>
 
       {/* Search Input */}

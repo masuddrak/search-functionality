@@ -1,0 +1,10 @@
+.tshirt-designer img {
+  cursor: move;
+  user-select: none;
+}
+.t-shirt {
+  background-image: url("t-shirt.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

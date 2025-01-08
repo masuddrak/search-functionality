@@ -8,11 +8,13 @@ function App() {
 
   return (
     <>
-      <div>
-        <div className="m-8">
+      <div className="m-8 space-y-5">
+        <div>
           <Table></Table>
         </div>
-        <div></div>
+        <div>
+          <DragDrop></DragDrop>
+        </div>
       </div>
     </>
   );
